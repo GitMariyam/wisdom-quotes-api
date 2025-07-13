@@ -8,7 +8,7 @@ phases:
       - REPOSITORY_URI=084375585677.dkr.ecr.us-east-1.amazonaws.com/wisdom-quotes-api
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
-build:
+  build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image for linux/amd64...
@@ -25,5 +25,6 @@ build:
       - printf '[{"name":"wisdom-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
-  files: imagedefinitions.json
+  files:
+    - imagedefinitions.json
 
