@@ -4,8 +4,8 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password | docker login --username AWS --password-stdin 084375585677.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=084375585677.dkr.ecr.us-east-1.amazonaws.com/wisdom-quotes-api
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $REPOSITORY_URI # same here change to hardcoded URI of ECR repo uri
+      - REPOSITORY_URI=$REPOSITORY_URI #change this to hardcoded URI if testing aws console appraoch not automation
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
