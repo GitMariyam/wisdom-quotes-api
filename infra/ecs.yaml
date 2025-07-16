@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Nested Stack for Wisdom Quotes App
+
+Parameters:
+  ECSClusterName:
+    Type: String
+
+  ECRRepositoryUri:
+    Type: String
+
+  ECSExecutionRoleArn:
+    Type: String
+
+Resources:
+
+  ECSClusterStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://wisdom-cfn-templates.s3.us-east-1.amazonaws.com/cluster.yaml
+      Parameters:
+        ClusterName: !Ref ECSClusterName
+
+  ECSTaskDefStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ECSClusterStack
+    Properties:
+      TemplateURL: https://wisdom-cfn-templates.s3.us-east-1.amazonaws.com/task-definition.yaml
+      Parameters:
+        ECRRepositoryUri: !Ref ECRRepositoryUri
+        ECSExecutionRoleArn: !Ref ECSExecutionRoleArn
+
+  ECSServiceStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: ECSTaskDefStack
+    Properties:
+      TemplateURL: https://wisdom-cfn-templates.s3.us-east-1.amazonaws.com/service.yaml
+      Parameters:
+        ECSClusterName: !Ref ECSClusterName
+        TaskDefinitionArn: !GetAtt ECSTaskDefStack.Outputs.TaskDefinitionArn
+
+

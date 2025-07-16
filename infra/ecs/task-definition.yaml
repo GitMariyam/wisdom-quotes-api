@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Task Definition for Wisdom Quotes App
+
+Parameters:
+  ECRRepositoryUri:
+    Type: String
+    Description: URI of the ECR image
+
+  ECSExecutionRoleArn:
+    Type: String
+    Description: ARN of the ECS task execution role
+
+Resources:
+  WisdomTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: wisdom-quotes-task
+      Cpu: '256'
+      Memory: '512'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !Ref ECSExecutionRoleArn
+      ContainerDefinitions:
+        - Name: wisdom-container
+          Image: !Sub "${ECRRepositoryUri}:latest"
+          PortMappings:
+            - ContainerPort: 8080
+          Essential: true
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/wisdom-quotes
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+      Tags:
+        - Key: Environment
+          Value: dev
+        - Key: Project
+          Value: wisdom
+
+Outputs:
+  TaskDefinitionArn:
+    Description: ARN of the ECS Task Definition
+    Value: !Ref WisdomTaskDefinition
+    Export:
+      Name: WisdomTaskDefinitionArn
+
+

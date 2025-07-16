@@ -4,7 +4,10 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password | docker login --username AWS --password-stdin $REPOSITORY_URI # same here change to hardcoded URI of ECR repo uri
+      - REPO_URL=$( echo REPOSITORY_URI | cut -d'/' -f1)
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $REPO_URL #expected value similar to REPOSITORY_URI but without repo name like this 123456789012.dkr.ecr.us-east-1.amazonaws.com
+      - echo Logging in to Docker Hub...
+      - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
       - REPOSITORY_URI=$REPOSITORY_URI #change this to hardcoded URI if testing aws console appraoch not automation
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 

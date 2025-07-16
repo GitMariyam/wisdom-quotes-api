@@ -1,0 +1,62 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:084375585677:task-definition/wisdom-task:2",
+    "containerDefinitions": [
+        {
+            "name": "wisdom-api",
+            "image": "084375585677.dkr.ecr.us-east-1.amazonaws.com/wisdom-quotes-api:f881d36",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "name": "wisdom-api-8080-tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "systemControls": []
+        }
+    ],
+    "family": "wisdom-task",
+    "executionRoleArn": "arn:aws:iam::084375585677:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 2,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048",
+    "registeredAt": "2025-07-13T19:09:22.448000-05:00",
+    "registeredBy": "arn:aws:sts::084375585677:assumed-role/AWSCodePipelineServiceRole-us-east-1-wisdome-pipeline/1752451762154"
+}

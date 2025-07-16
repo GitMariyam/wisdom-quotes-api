@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Main stack for Wisdom Quotes app — ECR, IAM, and CodeBuild automation
+
+Parameters:
+  GitHubRepo:
+    Type: String
+    Description: GitHub repository URL (e.g., https://github.com/yourname/yourrepo)
+  ECSExecutionRoleArn:
+    Type: String
+  CodeBuildServiceRoleArn:
+    Type: String
+  CodePipelineServiceRoleArn:
+    Type: String
+
+Resources:
+
+  ECRStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://wisdom-cfn-templates.s3.us-east-1.amazonaws.com/ecr.yaml
+
+
+  CodeBuildStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: [ECRStack]
+    Properties:
+      TemplateURL: https://wisdom-cfn-templates.s3.us-east-1.amazonaws.com/codebuild.yaml
+      Parameters:
+        ECRRepositoryUri: !GetAtt ECRStack.Outputs.ECRRepositoryUri
+        CodeBuildServiceRoleArn: !Ref CodeBuildServiceRoleArn
+
+Outputs:
+  ECRRepositoryUri:
+    Description: ECR URI from child stack
+    Value: !GetAtt ECRStack.Outputs.ECRRepositoryUri
+
+  CodeBuildProjectName:
+    Description: Name of CodeBuild project
+    Value: !GetAtt CodeBuildStack.Outputs.CodeBuildProjectName

@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CodeBuild project for Wisdom Quotes API
+
+Parameters:
+  CodeBuildServiceRoleArn:
+    Type: String
+    Description: ARN of the CodeBuild IAM Role
+
+  ECRRepositoryUri:
+    Type: String
+    Description: URI of the ECR repository
+
+Resources:
+
+  WisdomQuotesCodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: wisdom-quotes-codebuild
+      ServiceRole: !Ref CodeBuildServiceRoleArn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:6.0
+        Type: LINUX_CONTAINER
+        PrivilegedMode: true
+        EnvironmentVariables:
+          - Name: REPOSITORY_URI
+            Value: !Ref ECRRepositoryUri
+      Source:
+        Type: GITHUB
+        Location: https://github.com/GitMariyam/wisdom-quotes-api.git
+        BuildSpec: buildspec.yml
+      TimeoutInMinutes: 10
+      Tags:
+        - Key: Environment
+          Value: dev
+        - Key: Project
+          Value: wisdom
+
+Outputs:
+  CodeBuildProjectName:
+    Description: Name of the CodeBuild project
+    Value: !Ref WisdomQuotesCodeBuild
+    Export:
+      Name: WisdomQuotesCodeBuildName
+

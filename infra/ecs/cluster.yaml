@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Cluster for Wisdom Quotes App
+
+Resources:
+  WisdomECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: wisdom-lines-cluster
+      Tags:
+        - Key: Environment
+          Value: dev
+        - Key: Project
+          Value: wisdom
+
+Outputs:
+  ECSClusterName:
+    Description: Name of the ECS Cluster
+    Value: !Ref WisdomECSCluster
+    Export:
+      Name: WisdomECSClusterName
+

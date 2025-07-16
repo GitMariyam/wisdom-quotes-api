@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Service for Wisdom Quotes App
+
+Parameters:
+  ECSClusterName:
+    Type: String
+    Description: Name of the ECS Cluster
+
+  TaskDefinitionArn:
+    Type: String
+    Description: ARN of the ECS Task Definition
+
+Resources:
+  WisdomServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable inbound traffic to wisdom service container
+      VpcId: vpc-0d957773dee801175  # Make sure this is correct for your account/region
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Project
+          Value: wisdom
+        - Key: Environment
+          Value: dev
+
+  WisdomService:
+    Type: AWS::ECS::Service
+    DependsOn: WisdomServiceSecurityGroup
+    Properties:
+      Cluster: !Ref ECSClusterName
+      DesiredCount: 1
+      LaunchType: FARGATE
+      TaskDefinition: !Ref TaskDefinitionArn
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref WisdomServiceSecurityGroup
+          Subnets:
+            - !Select [0, !GetAZs '']  # ✅ You can later replace with specific subnet IDs
+      Tags:
+        - Key: Project
+          Value: wisdom
+        - Key: Environment
+          Value: dev
+
+Outputs:
+  ECSServiceName:
+    Description: ECS Service name
+    Value: !Ref WisdomService
+    Export:
+      Name: WisdomServiceName
+
+

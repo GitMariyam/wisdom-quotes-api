@@ -1,0 +1,72 @@
+{
+    "projects": [
+        {
+            "name": "wisdom-quotes-build",
+            "arn": "arn:aws:codebuild:us-east-1:084375585677:project/wisdom-quotes-build",
+            "source": {
+                "type": "GITHUB",
+                "location": "https://github.com/GitMariyam/wisdom-quotes-api",
+                "gitCloneDepth": 1,
+                "gitSubmodulesConfig": {
+                    "fetchSubmodules": false
+                },
+                "buildspec": "buildspec.yml",
+                "reportBuildStatus": false,
+                "insecureSsl": false
+            },
+            "secondarySources": [],
+            "secondarySourceVersions": [],
+            "artifacts": {
+                "type": "S3",
+                "location": "aws-cicd-myapp",
+                "path": "",
+                "namespaceType": "NONE",
+                "name": "wisdom-quotes-build",
+                "packaging": "ZIP",
+                "overrideArtifactName": false,
+                "encryptionDisabled": false
+            },
+            "secondaryArtifacts": [],
+            "cache": {
+                "type": "NO_CACHE"
+            },
+            "environment": {
+                "type": "LINUX_CONTAINER",
+                "image": "aws/codebuild/amazonlinux-x86_64-standard:5.0",
+                "computeType": "BUILD_GENERAL1_SMALL",
+                "environmentVariables": [],
+                "privilegedMode": false,
+                "imagePullCredentialsType": "CODEBUILD"
+            },
+            "serviceRole": "arn:aws:iam::084375585677:role/service-role/codebuild-wisdom-quotes-build-service-role",
+            "timeoutInMinutes": 15,
+            "queuedTimeoutInMinutes": 480,
+            "encryptionKey": "arn:aws:kms:us-east-1:084375585677:alias/aws/s3",
+            "tags": [],
+            "created": "2025-07-13T18:22:15.523000-05:00",
+            "lastModified": "2025-07-13T18:44:01.135000-05:00",
+            "webhook": {
+                "url": "https://api.github.com/repos/GitMariyam/wisdom-quotes-api/hooks/557849268",
+                "payloadUrl": "https://codebuild.us-east-1.amazonaws.com/webhooks?t=eyJlbmNyeXB0ZWREYXRhIjoiWit6OFBSdHh2Kzl5VXl2VmZqTDV6ODVXNTFJSkp1SjJKMVY4K2RaZC90UE5wbTJSbnFlTmh0clFFd0JJeFRWaTcyWFUvQ0RuMitaUmFQMEt0enZlamdJPSIsIml2UGFyYW1ldGVyU3BlYyI6InNpYTJoTzN0RkJkckxiRjIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&v=1",
+                "filterGroups": [],
+                "buildType": "BUILD",
+                "manualCreation": false
+            },
+            "badge": {
+                "badgeEnabled": false
+            },
+            "logsConfig": {
+                "cloudWatchLogs": {
+                    "status": "ENABLED"
+                },
+                "s3Logs": {
+                    "status": "DISABLED",
+                    "encryptionDisabled": false
+                }
+            },
+            "fileSystemLocations": [],
+            "projectVisibility": "PRIVATE"
+        }
+    ],
+    "projectsNotFound": []
+}
