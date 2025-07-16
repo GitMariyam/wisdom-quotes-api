@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - REPO_URL=$( echo REPOSITORY_URI | cut -d'/' -f1)
+      - REPO_URL=$( echo $REPOSITORY_URI | cut -d'/' -f1)
       - aws ecr get-login-password | docker login --username AWS --password-stdin $REPO_URL #expected value similar to REPOSITORY_URI but without repo name like this 123456789012.dkr.ecr.us-east-1.amazonaws.com
       - echo Logging in to Docker Hub...
       - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
